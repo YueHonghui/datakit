@@ -2,7 +2,7 @@
 set -e
 
 DB_FILE="superset_home/superset.db"
-
+source /root/superset/bin/activate
 if [ ! -f "$DB_FILE" ]; then
   echo "Superset is initialized because the database file does not exist..."
 

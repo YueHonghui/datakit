@@ -6,16 +6,17 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Shanghai
 SHELL ["/bin/bash", "-c"]
 USER root
-RUN ls -lh /etc/apt/sources.list.d && rm -f /etc/apt/sources.list 
+RUN ls -lh /etc/apt/sources.list.d && rm -f /etc/apt/sources.list && groupadd -g 1000 superset && useradd -u 1000 -g 1000 -s /bin/bash -G sudo -d /home/superset -m superset
 COPY ./sources.list /etc/apt/sources.list
 COPY ./duckdb /usr/local/bin/
 COPY entrypoint.sh /entrypoint.sh
+COPY assets/dashboard_export.zip /home/superset/
 RUN apt-get update -o Acquire::https::mirrors.tuna.tsinghua.edu.cn::Verify-Peer=false -o Acquire::https::security.ubuntu.com::Verify-Host=false -o Acquire::https::archive.ubuntu.com::Verify-Host=false && \
     apt-get install -o Acquire::https::mirrors.tuna.tsinghua.edu.cn::Verify-Peer=false -o Acquire::https::security.ubuntu.com::Verify-Host=false -o Acquire::https::archive.ubuntu.com::Verify-Host=false -y ca-certificates
 RUN apt-get install -y build-essential pkgconf libssh-dev libz-dev unzip uuid-dev liblzma-dev libreadline-dev libffi-dev libbz2-dev git g++ cmake ninja-build libssl-dev python3-full python3-pip
 
 RUN chmod +x /usr/local/bin/duckdb && \
-      mkdir -p /root/superset && python3 -m venv /root/superset && source /root/superset/bin/activate && \
+      python3 -m venv /home/superset && source /home/superset/bin/activate && \
       python3 -m ensurepip --upgrade && python3 -m pip install --upgrade setuptools && \
       pip install apache-superset==4.0.2 \
                 psycopg2-binary \

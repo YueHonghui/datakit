@@ -1,8 +1,10 @@
 #!/bin/bash
+
+# modified from https://github.com/kyaukyuai/jaffle_shop_duckdb_superset
 set -e
 
-DB_FILE="superset_home/superset.db"
-source /root/superset/bin/activate
+DB_FILE="/home/superset/superset.db"
+source /home/superset/bin/activate
 if [ ! -f "$DB_FILE" ]; then
   echo "Superset is initialized because the database file does not exist..."
 
@@ -15,7 +17,7 @@ if [ ! -f "$DB_FILE" ]; then
   superset db upgrade
   superset init
 #  superset set_database_uri -d DW -u duckdb:///superset_home/jaffle_shop.duckdb
-  superset import-dashboards --path superset_home/assets/dashboard_export.zip
+  superset import-dashboards --path /home/superset/dashboard_export.zip
 else
   echo "Initialization is skipped because the database file exists."
 fi

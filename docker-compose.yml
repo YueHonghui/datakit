@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  superset:
+    restart: always
+    image: datakit:0.0.1
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./:/home/superset/shared
